@@ -6,6 +6,7 @@ from scipy.optimize import nnls
 # prefer skimage's tested implementation; fallbacks below
 from skimage.color import deltaE_ciede2000 as _skimage_deltaE
 
+
 def cie_de2000(a, b):
     """
     Robust wrapper around skimage.deltaE_ciede2000.
@@ -136,6 +137,7 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
 
     return best
 
+
 # Sample pigment data
 sample = {
     'P01':[50.0,20.0,30.0],'P02':[60.0,-10.0,15.0],'P03':[30.0,5.0,-20.0],'P04':[70.0,10.0,5.0],
@@ -150,9 +152,9 @@ pigments_df = pd.DataFrame.from_dict(sample, orient='index', columns=['L','a','b
 st.title("🎨 Mix Lab Optimizer")
 
 st.sidebar.header("Input Parameters")
-L = st.sidebar.number_input("Target L", value=50.0)
-a = st.sidebar.number_input("Target a", value=5.0)
-b = st.sidebar.number_input("Target b", value=8.0)
+L = st.sidebar.number_input("Zielwert L", value=50.0)
+a = st.sidebar.number_input("Zielwert a", value=5.0)
+b = st.sidebar.number_input("Zielwert b", value=8.0)
 total_grams = st.sidebar.number_input("Total grams", value=500.0, min_value=0.01)
 step = st.sidebar.number_input("Step size (g)", value=0.01, min_value=0.001)
 max_components = st.sidebar.slider("Max pigments per recipe", min_value=1, max_value=6, value=4)
@@ -172,7 +174,6 @@ if st.button("Find Best Recipe"):
     st.subheader("🔍 Result")
     st.write(f"**DeltaE00:** {res['deltaE']:.4f}")
     st.write(f"**Mixed LAB:** {np.round(res['mixed_lab'], 4)}")
-    # st.write("**Pigment Combination:**", res['combo'])
 
     recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Grams"])
     st.table(recipe_df)
