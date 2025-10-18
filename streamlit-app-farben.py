@@ -151,8 +151,8 @@ sample = {
 }
 pigments_df = pd.DataFrame.from_dict(sample, orient='index', columns=['L','a','b'])
 
-st.write('Dummy Werte Grundfarben')
-st.table(pigments_df)
+# st.write('Dummy Werte Grundfarben')
+# st.table(pigments_df)
 
 
 st.sidebar.header("Input Parameter")
