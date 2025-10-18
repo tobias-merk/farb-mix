@@ -194,5 +194,3 @@ if st.button("Finde das beste Rezept"):
 
     recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gram"])
     st.table(recipe_df)
-
-
