@@ -189,7 +189,7 @@ if st.button("Finde das beste Rezept"):
     )
 
     st.subheader("🔍 Ergebnis")
-    st.write(f"**DeltaE00:** {res['deltaE']:.4f}")
+    st.write(f"**DeltaE Wert:** {res['deltaE']:.4f}")
     st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 4)}")
 
     recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gram"])
