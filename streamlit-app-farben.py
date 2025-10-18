@@ -118,7 +118,7 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
                 continue
 
             if dE < best['deltaE']:
-                recipe = { names[combo[i]]: float(grams[i]) for i in range(len(combo)) }
+                recipe = { names[combo[i]]: float(np.round(grams[i], 4)) for i in range(len(combo)) }
                 best = {'deltaE': float(dE), 'recipe': recipe, 'mixed_lab': mixed.tolist(), 'combo': [names[i] for i in combo]}
                 if debug:
                     # print("NEW BEST ΔE={:.4f} combo={} recipe={}".format(dE, best['combo'], best['recipe']))
