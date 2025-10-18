@@ -138,6 +138,9 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
     return best
 
 
+# Streamlit UI
+st.title("🎨 Farben-Mix Optimierer")
+
 # Sample pigment data
 sample = {
     'P01':[50.0,20.0,30.0],'P02':[60.0,-10.0,15.0],'P03':[30.0,5.0,-20.0],'P04':[70.0,10.0,5.0],
@@ -151,8 +154,6 @@ pigments_df = pd.DataFrame.from_dict(sample, orient='index', columns=['L','a','b
 st.write('Dummy Werte Grundfarben')
 st.table(pigments_df)
 
-# Streamlit UI
-st.title("🎨 Farben-Mix Optimierer")
 
 st.sidebar.header("Input Parameter")
 L = st.sidebar.number_input("Zielwert L", value=50.0)
