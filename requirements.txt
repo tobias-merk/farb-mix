@@ -1,0 +1,6 @@
+streamlit
+itertools
+pandas
+numpy
+scipy
+scikit-image
