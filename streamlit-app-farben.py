@@ -177,7 +177,7 @@ L = st.sidebar.number_input("Zielwert L", value=50.0)
 a = st.sidebar.number_input("Zielwert a", value=5.0)
 b = st.sidebar.number_input("Zielwert b", value=8.0)
 total_grams = st.sidebar.number_input("Gewünschte Menge [gramm]", value=500.0, min_value=0.01)
-step = st.sidebar.number_input("Genauigkeit (gramm)", value=0.01, min_value=0.001)
+step = st.sidebar.number_input("Genauigkeit [gramm]", value=0.01, min_value=0.001)
 max_components = st.sidebar.slider("Maximale Anzahl Farben", min_value=1, max_value=6, value=4)
 debug = st.sidebar.checkbox("Debug Modus", value=False)
 
