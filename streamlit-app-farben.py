@@ -138,6 +138,23 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
     return best
 
 
+# Benutzerliste mit Passwörtern
+users = {
+    "Philipp": "Philipp98"
+}
+
+# Login-Formular
+st.title("🔐 Login")
+username = st.text_input("Benutzername")
+password = st.text_input("Passwort", type="password")
+
+if username in users and users[username] == password:
+    st.success(f"Willkommen, {username}!")
+    # Hier kommt deine App-Logik
+else:
+    st.warning("Zugriff verweigert. Bitte gültige Zugangsdaten eingeben.")
+    st.stop()
+
 # Streamlit UI
 st.title("🎨 Farben-Mix Optimierer")
 
