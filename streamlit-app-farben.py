@@ -148,19 +148,22 @@ sample = {
 }
 pigments_df = pd.DataFrame.from_dict(sample, orient='index', columns=['L','a','b'])
 
-# Streamlit UI
-st.title("🎨 Mix Lab Optimizer")
+st.write('Dummy Werte Grundfarben')
+st.table(pigments_df)
 
-st.sidebar.header("Input Parameters")
+# Streamlit UI
+st.title("🎨 Farben-Mix Optimierer")
+
+st.sidebar.header("Input Parameter")
 L = st.sidebar.number_input("Zielwert L", value=50.0)
 a = st.sidebar.number_input("Zielwert a", value=5.0)
 b = st.sidebar.number_input("Zielwert b", value=8.0)
-total_grams = st.sidebar.number_input("Total grams", value=500.0, min_value=0.01)
-step = st.sidebar.number_input("Step size (g)", value=0.01, min_value=0.001)
-max_components = st.sidebar.slider("Max pigments per recipe", min_value=1, max_value=6, value=4)
-debug = st.sidebar.checkbox("Enable debug output", value=False)
+total_grams = st.sidebar.number_input("Gewünschte Menge [gramm]", value=500.0, min_value=0.01)
+step = st.sidebar.number_input("Genauigkeit (gramm)", value=0.01, min_value=0.001)
+max_components = st.sidebar.slider("Maximale Anzahl Farben", min_value=1, max_value=6, value=4)
+debug = st.sidebar.checkbox("Debug Modus", value=False)
 
-if st.button("Find Best Recipe"):
+if st.button("Finde das beste Rezept"):
     target_lab = [L, a, b]
     res = find_best_recipe(
         pigment_labs=pigments_df,
@@ -171,11 +174,11 @@ if st.button("Find Best Recipe"):
         debug=debug
     )
 
-    st.subheader("🔍 Result")
+    st.subheader("🔍 Ergebnis")
     st.write(f"**DeltaE00:** {res['deltaE']:.4f}")
-    st.write(f"**Mixed LAB:** {np.round(res['mixed_lab'], 4)}")
+    st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 4)}")
 
-    recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Grams"])
+    recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gram"])
     st.table(recipe_df)
 
 
