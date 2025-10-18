@@ -1,6 +1,4 @@
 import streamlit as st
-import pandas as pd
-# from mix_lab import *
 import itertools
 import numpy as np
 import pandas as pd
