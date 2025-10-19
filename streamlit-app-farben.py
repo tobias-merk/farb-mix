@@ -207,7 +207,7 @@ if __name__ == '__main__':
 
     total_grams = st.sidebar.number_input("Gewünschte Menge [gramm]", value=500.0, min_value=0.01)
     step = st.sidebar.number_input("Genauigkeit [gramm]", value=0.01, min_value=0.001)
-    max_components = st.sidebar.slider("Maximale Anzahl Farben", min_value=1, max_value=6, value=4)
+    max_components = st.sidebar.slider("Maximale Anzahl Farben", min_value=1, max_value=5, value=4)
     debug = st.sidebar.checkbox("Debug Modus", value=False)
 
     if st.button("Berechnen"):
