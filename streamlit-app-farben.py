@@ -137,13 +137,21 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
 
     return best
 
+@st.cache_data
+def read_excel_colours(path):
+    df = pd.read_excel(path)
+    df['#Eingabefarbe'] = df['#Eingabefarbe'].astype(str)
+
+    return df
+
+
 
 if __name__ == '__main__':
 
     # Streamlit UI
     st.title("🎨 Farben-Mix Optimierer")
 
-    # Sample pigment data
+    # Grundfarben
     sample = {
         'P01':[50.0,20.0,30.0],'P02':[60.0,-10.0,15.0],'P03':[30.0,5.0,-20.0],'P04':[70.0,10.0,5.0],
         'P05':[40.0,-25.0,10.0],'P06':[55.0,15.0,-5.0],'P07':[65.0,-5.0,-15.0],'P08':[20.0,30.0,10.0],
@@ -153,16 +161,38 @@ if __name__ == '__main__':
     }
     pigments_df = pd.DataFrame.from_dict(sample, orient='index', columns=['L','a','b'])
 
+    # Desired colours
+    colour_targets_df = read_excel_colours('Pantone_LAB_20251019.xlsx')
+
+
+    # Sidebar
     st.sidebar.header("Input Parameter")
-    L = st.sidebar.number_input("Zielwert L", value=50.0)
-    a = st.sidebar.number_input("Zielwert a", value=5.0)
-    b = st.sidebar.number_input("Zielwert b", value=8.0)
+
+    # Color selection
+    colour_names = colour_targets_df['#Eingabefarbe'].tolist()
+    selected_colour = st.sidebar.selectbox("Ziel-Farbe auswählen", ["Manuell eingeben"] + colour_names)
+
+    if selected_colour != "Manuell eingeben":
+        selected_row = colour_targets_df[colour_targets_df['#Eingabefarbe'] == selected_colour].iloc[0]
+        L = selected_row['L*']
+        a = selected_row['a*']
+        b = selected_row['b*']
+        st.sidebar.markdown(f"**Ausgewählte LAB-Werte:** \n \n L={L} \n \n a={a} \n \n b={b}")
+    else:
+        L = st.sidebar.number_input("Zielwert L", value=50.0)
+        a = st.sidebar.number_input("Zielwert a", value=5.0)
+        b = st.sidebar.number_input("Zielwert b", value=8.0)
+
+
+    # L = st.sidebar.number_input("Zielwert L", value=50.0)
+    # a = st.sidebar.number_input("Zielwert a", value=5.0)
+    # b = st.sidebar.number_input("Zielwert b", value=8.0)
     total_grams = st.sidebar.number_input("Gewünschte Menge [gramm]", value=500.0, min_value=0.01)
     step = st.sidebar.number_input("Genauigkeit [gramm]", value=0.01, min_value=0.001)
     max_components = st.sidebar.slider("Maximale Anzahl Farben", min_value=1, max_value=6, value=4)
     debug = st.sidebar.checkbox("Debug Modus", value=False)
 
-    if st.button("Finde das beste Rezept"):
+    if st.button("Berechnen"):
         target_lab = [L, a, b]
         res = find_best_recipe(
             pigment_labs=pigments_df,
@@ -177,5 +207,5 @@ if __name__ == '__main__':
         st.write(f"**DeltaE (ΔE) Wert:** {res['deltaE']:.4f}")
         st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 4)}")
 
-        recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gram"])
+        recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gramm"])
         st.table(recipe_df)
