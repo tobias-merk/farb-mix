@@ -124,7 +124,7 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
                     # print("NEW BEST ΔE={:.4f} combo={} recipe={}".format(dE, best['combo'], best['recipe']))
                     # st.write("NEW BEST ΔE={:.4f} combo={} recipe={}, mixed_lab={}".format(dE, best['combo'], best['recipe'], np.round(best['mixed_lab'], 4)))
                     st.write(f"NEW BEST ΔE={dE:.4f} combo={best['combo']} recipe={best['recipe']}, "
-                             f"mixed_lab={best['mixed_lab']:.6f}")
+                             f"mixed_lab={best['mixed_lab']:.4f}")
 
     # fallback: single nearest pigment if nothing found
     if best['recipe'] is None:
