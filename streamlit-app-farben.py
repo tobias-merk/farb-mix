@@ -138,8 +138,8 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
     return best
 
 @st.cache_data
-def read_excel_colours(path, engine='openpyxl'):
-    df = pd.read_excel(path)
+def read_excel_colours(path):
+    df = pd.read_excel(path, engine='openpyxl')
     df['#Eingabefarbe'] = df['#Eingabefarbe'].astype(str)
 
     return df
