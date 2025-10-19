@@ -184,8 +184,8 @@ if __name__ == '__main__':
 
     pigments_df = pd.DataFrame.from_dict(lab_colors, orient='index', columns=['L','a','b'])
 
-    # Desired colours
-    colour_targets_df = read_excel_colours('Pantone_LAB_20251019.xlsx')
+    # # Desired colours
+    # colour_targets_df = read_excel_colours('Pantone_LAB_20251019.xlsx')
 
 
     # Sidebar
@@ -235,21 +235,34 @@ if __name__ == '__main__':
         # st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 6)}")
         st.write(f"**Berechnete LAB Werte:** {res['mixed_lab']}")
 
+        # # Convert mixed LAB to RGB and show as swatch
+        # mixed_lab = res["mixed_lab"].reshape(1, 1, 3)
+        # mixed_rgb = lab2rgb(mixed_lab)[0][0]
+        # mixed_hex = '#{:02x}{:02x}{:02x}'.format(*(np.clip(mixed_rgb * 255, 0, 255).astype(int)))
+        #
+        # st.markdown(f"**Gemischte Farbe:**", unsafe_allow_html=True)
+        # st.markdown(
+        #     f"<div style='width:40px;height:20px;background-color:{mixed_hex};border:1px solid #000'></div>",
+        #     unsafe_allow_html=True
+        # )
+
         # Convert mixed LAB to RGB and show as swatch
         mixed_lab = res["mixed_lab"].reshape(1, 1, 3)
         mixed_rgb = lab2rgb(mixed_lab)[0][0]
         mixed_hex = '#{:02x}{:02x}{:02x}'.format(*(np.clip(mixed_rgb * 255, 0, 255).astype(int)))
 
-        st.markdown(f"**Gemischte Farbe:**", unsafe_allow_html=True)
+        # Render label and swatch inline with minimal spacing
         st.markdown(
-            f"<div style='width:100px;height:40px;background-color:{mixed_hex};border:1px solid #000'></div>",
+            f"""
+            <div style='display:flex;align-items:center;gap:6px'>
+                <span style='font-weight:bold'>Gemischte Farbe:</span>
+                <div style='width:40px;height:20px;background-color:{mixed_hex};border:1px solid #000'></div>
+            </div>
+            """,
             unsafe_allow_html=True
         )
 
         st.text("")
-        st.text("")
-
-
         # Create result table with color preview
         rows = []
         for pigment, grams in res["recipe"].items():
