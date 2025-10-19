@@ -205,7 +205,7 @@ if __name__ == '__main__':
         a = st.sidebar.number_input("Zielwert a", value=5.0)
         b = st.sidebar.number_input("Zielwert b", value=8.0)
 
-    total_grams = st.sidebar.number_input("Gewünschte Menge [g]", value=500.0, min_value=1)
+    total_grams = st.sidebar.number_input("Gewünschte Menge [g]", value=500.0, min_value=1.0)
     step = st.sidebar.number_input("Genauigkeit [g]", value=0.01, min_value=0.001)
     max_components = st.sidebar.slider("Maximale Anzahl Farben", min_value=1, max_value=5, value=4)
     debug = st.sidebar.checkbox("Debug Modus", value=False)
