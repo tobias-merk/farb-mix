@@ -3,6 +3,7 @@ import itertools
 import numpy as np
 import pandas as pd
 from scipy.optimize import nnls
+from skimage.color import lab2rgb
 # prefer skimage's tested implementation; fallbacks below
 from skimage.color import deltaE_ciede2000 as _skimage_deltaE
 
@@ -234,5 +235,43 @@ if __name__ == '__main__':
         # st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 6)}")
         st.write(f"**Berechnete LAB Werte:** {res['mixed_lab']}")
 
-        recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gramm"])
-        st.table(recipe_df)
+        # Convert mixed LAB to RGB and show as swatch
+        mixed_lab = res["mixed_lab"].reshape(1, 1, 3)
+        mixed_rgb = lab2rgb(mixed_lab)[0][0]
+        mixed_hex = '#{:02x}{:02x}{:02x}'.format(*(np.clip(mixed_rgb * 255, 0, 255).astype(int)))
+
+        st.markdown(f"**Gemischte Farbe:**", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='width:100px;height:40px;background-color:{mixed_hex};border:1px solid #000'></div>",
+            unsafe_allow_html=True
+        )
+
+        st.text("")
+        st.text("")
+
+
+        # Create result table with color preview
+        rows = []
+        for pigment, grams in res["recipe"].items():
+            lab = pigments_df.loc[pigment].values.reshape(1, 1, 3)
+            rgb = lab2rgb(lab)[0][0]
+            hex_color = '#{:02x}{:02x}{:02x}'.format(*(np.clip(rgb * 255, 0, 255).astype(int)))
+            rows.append({
+                "Farbe": f"<div style='width:40px;height:20px;background-color:{hex_color};border:1px solid #000'></div>",
+                "Pigment": pigment,
+                "Gramm": grams,
+            })
+
+        recipe_df = pd.DataFrame(rows)
+
+        st.markdown("**Rezeptur:**")
+        # Wider layout
+        st.markdown(
+            f"<div style='width:600px'>{recipe_df.to_html(escape=False, index=False)}</div>",
+            unsafe_allow_html=True
+        )
+
+
+
+        # recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gramm"])
+        # st.table(recipe_df)
