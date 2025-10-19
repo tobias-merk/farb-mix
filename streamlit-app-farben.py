@@ -153,14 +153,6 @@ if __name__ == '__main__':
     st.title("🎨 Farben-Mix Optimierer")
 
     # Grundfarben
-    # sample = {
-    #     'P01':[50.0,20.0,30.0],'P02':[60.0,-10.0,15.0],'P03':[30.0,5.0,-20.0],'P04':[70.0,10.0,5.0],
-    #     'P05':[40.0,-25.0,10.0],'P06':[55.0,15.0,-5.0],'P07':[65.0,-5.0,-15.0],'P08':[20.0,30.0,10.0],
-    #     'P09':[45.0,0.0,0.0],'P10':[35.0,10.0,10.0],'P11':[80.0,-20.0,20.0],'P12':[25.0,18.0,-8.0],
-    #     'P13':[52.0,-8.0,12.0],'P14':[48.0,22.0,-6.0],'P15':[58.0,6.0,2.0],'P16':[42.0,-12.0,25.0],
-    #     'P17':[36.0,14.0,-18.0],'P18':[66.0,-2.0,8.0]
-    # }
-
     lab_colors = {
         "Schwarz": [0.0, 0.0, 0.0],
         "Weiß": [100.0, 0.0, 0.0],
@@ -186,7 +178,6 @@ if __name__ == '__main__':
 
     # # Desired colours
     # colour_targets_df = read_excel_colours('Pantone_LAB_20251019.xlsx')
-
 
     # Sidebar
     st.sidebar.header("Input Parameter")
@@ -230,6 +221,7 @@ if __name__ == '__main__':
         res["recipe"] = {k: v for k, v in res["recipe"].items() if v != 0}
         res["combo"] = [color for color in res["combo"] if color in res["recipe"]]
 
+        # Result
         st.subheader("🔍 Ergebnis")
         st.write(f"**DeltaE (ΔE) Wert:** {res['deltaE']:.4f}")
         # st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 6)}")
@@ -283,8 +275,6 @@ if __name__ == '__main__':
             f"<div style='width:600px'>{recipe_df.to_html(escape=False, index=False)}</div>",
             unsafe_allow_html=True
         )
-
-
 
         # recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gramm"])
         # st.table(recipe_df)
