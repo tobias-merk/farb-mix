@@ -190,20 +190,24 @@ if __name__ == '__main__':
     # Sidebar
     st.sidebar.header("Input Parameter")
 
-    # Color selection
-    colour_names = colour_targets_df['#Eingabefarbe'].tolist()
-    selected_colour = st.sidebar.selectbox("Ziel-Farbe auswählen", ["Manuell eingeben"] + colour_names)
+    # # Color selection
+    # colour_names = colour_targets_df['#Eingabefarbe'].tolist()
+    # selected_colour = st.sidebar.selectbox("Ziel-Farbe auswählen", ["Manuell eingeben"] + colour_names)
+    #
+    # if selected_colour != "Manuell eingeben":
+    #     selected_row = colour_targets_df[colour_targets_df['#Eingabefarbe'] == selected_colour].iloc[0]
+    #     L = selected_row['L*']
+    #     a = selected_row['a*']
+    #     b = selected_row['b*']
+    #     st.sidebar.markdown(f"**Ausgewählte LAB-Werte:** \n \n L={L} \n \n a={a} \n \n b={b}")
+    # else:
+    #     L = st.sidebar.number_input("Zielwert L", value=50.0)
+    #     a = st.sidebar.number_input("Zielwert a", value=5.0)
+    #     b = st.sidebar.number_input("Zielwert b", value=8.0)
 
-    if selected_colour != "Manuell eingeben":
-        selected_row = colour_targets_df[colour_targets_df['#Eingabefarbe'] == selected_colour].iloc[0]
-        L = selected_row['L*']
-        a = selected_row['a*']
-        b = selected_row['b*']
-        st.sidebar.markdown(f"**Ausgewählte LAB-Werte:** \n \n L={L} \n \n a={a} \n \n b={b}")
-    else:
-        L = st.sidebar.number_input("Zielwert L", value=50.0)
-        a = st.sidebar.number_input("Zielwert a", value=5.0)
-        b = st.sidebar.number_input("Zielwert b", value=8.0)
+    L = st.sidebar.number_input("Zielwert L", value=50.0)
+    a = st.sidebar.number_input("Zielwert a", value=5.0)
+    b = st.sidebar.number_input("Zielwert b", value=8.0)
 
     total_grams = st.sidebar.number_input("Gewünschte Menge [g]", value=500.0, min_value=1.0)
     step = st.sidebar.number_input("Genauigkeit [g]", value=0.01, min_value=0.001)
