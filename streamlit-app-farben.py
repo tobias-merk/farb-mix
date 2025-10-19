@@ -33,7 +33,7 @@ def mix_lab(weights, labs):
     s = float(w.sum())
     if s <= 0.0:
         return np.array([0.0, 0.0, 0.0], dtype=float)
-    return (L.T.dot(w) / s).ravel()
+    return (L.T.dot(w) / s).ravel().astype(float)
 
 def allocate_units(frac_units, total_units):
     base = np.floor(frac_units).astype(int)
@@ -118,13 +118,13 @@ def find_best_recipe(pigment_labs, target_lab, total_grams=500.0, step=0.01, max
                 continue
 
             if dE < best['deltaE']:
-                recipe = { names[combo[i]]: float(grams[i]) for i in range(len(combo)) }
-                best = {'deltaE': float(dE), 'recipe': recipe, 'mixed_lab': mixed.tolist(), 'combo': [names[i] for i in combo]}
+                recipe = {names[combo[i]]: float(grams[i]) for i in range(len(combo)) }
+                best = {'deltaE': float(dE), 'recipe': recipe, 'mixed_lab': mixed.astype(float), 'combo': [names[i] for i in combo]}
                 if debug:
                     # print("NEW BEST ΔE={:.4f} combo={} recipe={}".format(dE, best['combo'], best['recipe']))
                     # st.write("NEW BEST ΔE={:.4f} combo={} recipe={}, mixed_lab={}".format(dE, best['combo'], best['recipe'], np.round(best['mixed_lab'], 4)))
                     st.write(f"NEW BEST ΔE={dE:.4f} combo={best['combo']} recipe={best['recipe']}, "
-                             f"mixed_lab={np.round(best['mixed_lab'], 4)}")
+                             f"mixed_lab={best['mixed_lab']:.6f}")
 
     # fallback: single nearest pigment if nothing found
     if best['recipe'] is None:
@@ -160,28 +160,28 @@ if __name__ == '__main__':
     #     'P17':[36.0,14.0,-18.0],'P18':[66.0,-2.0,8.0]
     # }
 
-    grundfarben_lab = {
-        "Rot": [53.2, 80.1, 67.2],
-        "Grün": [46.2, -51.7, 49.9],
-        "Blau": [32.3, 79.2, -107.9],
-        "Gelb": [97.1, -21.6, 94.5],
-        "Orange": [74.9, 23.9, 78.9],
-        "Violett": [60.3, 98.2, -60.8],
-        "Türkis": [64.0, -45.0, -10.0],
-        "Pink": [81.0, 20.0, -30.0],
-        "Braun": [37.0, 15.0, 10.0],
-        "Beige": [85.0, 5.0, 10.0],
-        "Hellgrau": [75.0, 0.0, 0.0],
-        "Dunkelgrau": [40.0, 0.0, 0.0],
-        "Weiß": [100.0, 0.0, 0.0],
+    lab_colors = {
         "Schwarz": [0.0, 0.0, 0.0],
-        "Lindgrün": [80.0, -30.0, 30.0],
-        "Himmelblau": [70.0, -10.0, -40.0],
-        "Zitronengelb": [95.0, -5.0, 90.0],
-        "Magenta": [60.0, 90.0, -30.0]
+        "Weiß": [100.0, 0.0, 0.0],
+        "Rot": [53.24, 80.09, 67.20],
+        "Grün": [46.23, -51.70, 49.90],
+        "Blau": [32.30, 79.20, -107.86],
+        "Gelb": [97.14, -21.56, 94.48],
+        "Cyan": [91.11, -48.08, -14.14],
+        "Magenta": [60.32, 98.23, -60.82],
+        "Orange": [74.94, 23.93, 78.95],
+        "Pink": [81.24, 20.22, 2.12],
+        "Braun": [37.99, 13.56, 14.06],
+        "Lila": [29.78, 58.94, -36.49],
+        "Hellblau": [79.19, -4.29, -22.91],
+        "Hellgrün": [86.60, -43.10, 48.20],
+        "Dunkelblau": [12.97, 47.50, -64.70],
+        "Dunkelgrün": [28.00, -34.00, 20.00],
+        "Grau": [53.59, 0.00, 0.00],
+        "Beige": [90.00, 0.00, 10.00]
     }
 
-    pigments_df = pd.DataFrame.from_dict(grundfarben_lab, orient='index', columns=['L','a','b'])
+    pigments_df = pd.DataFrame.from_dict(lab_colors, orient='index', columns=['L','a','b'])
 
     # Desired colours
     colour_targets_df = read_excel_colours('Pantone_LAB_20251019.xlsx')
@@ -221,9 +221,14 @@ if __name__ == '__main__':
             debug=debug
         )
 
+        # Remove colors with recipe value 0
+        res["recipe"] = {k: v for k, v in res["recipe"].items() if v != 0}
+        res["combo"] = [color for color in res["combo"] if color in res["recipe"]]
+
         st.subheader("🔍 Ergebnis")
         st.write(f"**DeltaE (ΔE) Wert:** {res['deltaE']:.4f}")
-        st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 4)}")
+        # st.write(f"**Berechnete LAB Werte:** {np.round(res['mixed_lab'], 6)}")
+        st.write(f"**Berechnete LAB Werte:** {res['mixed_lab']}")
 
         recipe_df = pd.DataFrame(list(res['recipe'].items()), columns=["Pigment", "Gramm"])
         st.table(recipe_df)
