@@ -152,14 +152,36 @@ if __name__ == '__main__':
     st.title("🎨 Farben-Mix Optimierer")
 
     # Grundfarben
-    sample = {
-        'P01':[50.0,20.0,30.0],'P02':[60.0,-10.0,15.0],'P03':[30.0,5.0,-20.0],'P04':[70.0,10.0,5.0],
-        'P05':[40.0,-25.0,10.0],'P06':[55.0,15.0,-5.0],'P07':[65.0,-5.0,-15.0],'P08':[20.0,30.0,10.0],
-        'P09':[45.0,0.0,0.0],'P10':[35.0,10.0,10.0],'P11':[80.0,-20.0,20.0],'P12':[25.0,18.0,-8.0],
-        'P13':[52.0,-8.0,12.0],'P14':[48.0,22.0,-6.0],'P15':[58.0,6.0,2.0],'P16':[42.0,-12.0,25.0],
-        'P17':[36.0,14.0,-18.0],'P18':[66.0,-2.0,8.0]
+    # sample = {
+    #     'P01':[50.0,20.0,30.0],'P02':[60.0,-10.0,15.0],'P03':[30.0,5.0,-20.0],'P04':[70.0,10.0,5.0],
+    #     'P05':[40.0,-25.0,10.0],'P06':[55.0,15.0,-5.0],'P07':[65.0,-5.0,-15.0],'P08':[20.0,30.0,10.0],
+    #     'P09':[45.0,0.0,0.0],'P10':[35.0,10.0,10.0],'P11':[80.0,-20.0,20.0],'P12':[25.0,18.0,-8.0],
+    #     'P13':[52.0,-8.0,12.0],'P14':[48.0,22.0,-6.0],'P15':[58.0,6.0,2.0],'P16':[42.0,-12.0,25.0],
+    #     'P17':[36.0,14.0,-18.0],'P18':[66.0,-2.0,8.0]
+    # }
+
+    grundfarben_lab = {
+        "Rot": [53.2, 80.1, 67.2],
+        "Grün": [46.2, -51.7, 49.9],
+        "Blau": [32.3, 79.2, -107.9],
+        "Gelb": [97.1, -21.6, 94.5],
+        "Orange": [74.9, 23.9, 78.9],
+        "Violett": [60.3, 98.2, -60.8],
+        "Türkis": [64.0, -45.0, -10.0],
+        "Pink": [81.0, 20.0, -30.0],
+        "Braun": [37.0, 15.0, 10.0],
+        "Beige": [85.0, 5.0, 10.0],
+        "Hellgrau": [75.0, 0.0, 0.0],
+        "Dunkelgrau": [40.0, 0.0, 0.0],
+        "Weiß": [100.0, 0.0, 0.0],
+        "Schwarz": [0.0, 0.0, 0.0],
+        "Lindgrün": [80.0, -30.0, 30.0],
+        "Himmelblau": [70.0, -10.0, -40.0],
+        "Zitronengelb": [95.0, -5.0, 90.0],
+        "Magenta": [60.0, 90.0, -30.0]
     }
-    pigments_df = pd.DataFrame.from_dict(sample, orient='index', columns=['L','a','b'])
+
+    pigments_df = pd.DataFrame.from_dict(grundfarben_lab, orient='index', columns=['L','a','b'])
 
     # Desired colours
     colour_targets_df = read_excel_colours('Pantone_LAB_20251019.xlsx')
@@ -183,10 +205,6 @@ if __name__ == '__main__':
         a = st.sidebar.number_input("Zielwert a", value=5.0)
         b = st.sidebar.number_input("Zielwert b", value=8.0)
 
-
-    # L = st.sidebar.number_input("Zielwert L", value=50.0)
-    # a = st.sidebar.number_input("Zielwert a", value=5.0)
-    # b = st.sidebar.number_input("Zielwert b", value=8.0)
     total_grams = st.sidebar.number_input("Gewünschte Menge [gramm]", value=500.0, min_value=0.01)
     step = st.sidebar.number_input("Genauigkeit [gramm]", value=0.01, min_value=0.001)
     max_components = st.sidebar.slider("Maximale Anzahl Farben", min_value=1, max_value=6, value=4)
